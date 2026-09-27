@@ -64,6 +64,14 @@ export class Snake {
         this.updateCoordinates(field.cellSize);
     }
 
+    willEatFood(food) {
+        const head = this.body[0];
+        const nextHeadX = head.x + this.currentDirection.x;
+        const nextHeadY = head.y + this.currentDirection.y;
+
+        return nextHeadX === food.position.x && nextHeadY === food.position.y;
+    }
+
     updateCoordinates(cellSize) {
         this.coordinates = this.body.map(segment => ({
             x: segment.x * cellSize,
