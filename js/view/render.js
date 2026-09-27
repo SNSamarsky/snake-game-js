@@ -2,16 +2,19 @@ export class Render {
     constructor(canvas) {
         this.canvas = canvas;
         this.field = null;
+        this.food = null
     }
 
-    init(field) {
+    init(field, food) {
         this.field = field;
+        this.food = food;
         this.viewField();
     }
 
     view() {
         this.canvas.clear();
         this.viewField();
+        this.viewFood();
     }
 
     viewField() {
@@ -31,5 +34,22 @@ export class Render {
                 size
             );
         }
+    }
+
+    viewFood() {
+        if (!this.food.coordinates || !this.field) return;
+
+        const ctx = this.canvas.ctx;
+        ctx.fillStyle = 'yellow';
+        ctx.strokeStyle = 'gray';
+        ctx.lineWidth = 1;
+
+        const coord = this.food.coordinates;
+        const size = this.field.cellSize;
+
+        ctx.fillRect(coord.x, coord.y, size, size);
+
+        ctx.strokeRect(coord.x, coord.y, size,size);
+        console.log(this.food)
     }
 }
