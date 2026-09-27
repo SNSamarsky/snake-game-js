@@ -15,6 +15,7 @@ export class Snake {
         };
 
         this.currentDirection = this.directions.right;
+        this.lastStepDirection = this.directions.right;
     }
 
     init(field) {
@@ -27,6 +28,7 @@ export class Snake {
         ];
 
         this.currentDirection = this.directions.right;
+        this.lastStepDirection = this.directions.right;
 
         this.updateCoordinates(field.cellSize);
     }
@@ -35,8 +37,8 @@ export class Snake {
         const nextDir = this.directions[newDirName];
         if (!nextDir) return;
 
-        const isOpposite = (nextDir.x + this.currentDirection.x === 0) &&
-            (nextDir.y + this.currentDirection.y === 0);
+        const isOpposite = (nextDir.x + this.lastStepDirection.x === 0) &&
+            (nextDir.y + this.lastStepDirection.y === 0);
 
         if (!isOpposite) {
             this.currentDirection = nextDir;
@@ -45,6 +47,8 @@ export class Snake {
 
     move(field, isEatingFood = false) {
         const head = this.body[0];
+
+        this.lastStepDirection = this.currentDirection;
 
         const newHead = {
             x: head.x + this.currentDirection.x,
