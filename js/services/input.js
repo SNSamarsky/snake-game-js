@@ -5,28 +5,36 @@ export class InputHandler {
             'ArrowDown': 'down',
             'ArrowLeft': 'left',
             'ArrowRight': 'right',
-            
+
             'KeyW': 'up',
             'KeyS': 'down',
             'KeyA': 'left',
-            'KeyD': 'right'
+            'KeyD': 'right',
+
+            'Enter': 'start'
         };
 
         this.snake = null;
+        this.onStartCallback = null;
         this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
-    init(snake) {
+    init(snake, onStartCallback) {
         this.snake = snake;
+        this.onStartCallback = onStartCallback;
         window.addEventListener('keydown', this.handleKeyDown);
     }
 
     handleKeyDown(event) {
-        const direction = this.keyMap[event.code];
+        const action = this.keyMap[event.code];
+        if (!action) return;
 
-        if (direction && this.snake) {
-            event.preventDefault();
-            this.snake.setDirection(direction);
+        event.preventDefault();
+
+        if (action === 'start') {
+            if (this.onStartCallback) this.onStartCallback();
+        } else if (this.snake) {
+            this.snake.setDirection(action);
         }
     }
 

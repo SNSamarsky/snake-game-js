@@ -13,15 +13,8 @@ const snake = new Snake();
 const food = new Food();
 const canvas = new Canvas(ROOT_SELECTOR);
 const render = new Render(canvas);
-const handler = new InputHandler();
+const inputHandler = new InputHandler();
 
-const game = new Game(field, canvas, render, food, snake, handler);
+const game = new Game(field, canvas, render, food, snake, inputHandler);
 
-field.init();
-snake.init(field);
-food.init(field, snake.body);
-canvas.init(field.canvasSize);
-render.init(field, food, snake);
-handler.init(snake);
-
-//game.start()
+game.prepare();
