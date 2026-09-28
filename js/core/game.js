@@ -22,7 +22,7 @@ export class Game {
 
         this.render.init(this.field, this.food, this.snake);
 
-        this.drawStartScreen();
+        this.render.viewStartScreen();
     }
 
     start() {
@@ -35,13 +35,36 @@ export class Game {
     gameStep() {
         const isEating = this.snake.willEatFood(this.food);
 
-        this.snake.move(this.field, isEating);
+        const canMove = this.snake.move(
+            this.field,
+            isEating,
+            (nextHead, body) => this.checkCollision(nextHead, body)
+        );
+
+        if (!canMove) {
+            this.stop();
+            this.render.viewGameOverScreen();
+            return;
+        }
 
         if (isEating) {
             this.food.randomizePosition(this.field, this.snake.body);
         }
 
         this.render.view();
+    }
+
+    checkCollision(nextHead, body) {
+        const hitWall = nextHead.x < 0 ||
+            nextHead.x >= this.field.gridSize ||
+            nextHead.y < 0 ||
+            nextHead.y >= this.field.gridSize;
+
+        if (hitWall) return true;
+
+        const hitSelf = body.some(segment => segment.x === nextHead.x && segment.y === nextHead.y);
+
+        return hitSelf;
     }
 
     drawStartScreen() {

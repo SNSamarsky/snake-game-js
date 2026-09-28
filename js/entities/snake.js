@@ -45,7 +45,7 @@ export class Snake {
         }
     }
 
-    move(field, isEatingFood = false) {
+    move(field, isEatingFood = false, onCollision) {
         const head = this.body[0];
 
         this.lastStepDirection = this.currentDirection;
@@ -55,6 +55,10 @@ export class Snake {
             y: head.y + this.currentDirection.y
         };
 
+        if (onCollision(newHead, this.body)) {
+            return false;
+        }
+
         this.body.unshift(newHead);
 
         if (!isEatingFood) {
@@ -62,6 +66,8 @@ export class Snake {
         }
 
         this.updateCoordinates(field.cellSize);
+
+        return true;
     }
 
     willEatFood(food) {

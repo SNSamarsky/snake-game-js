@@ -73,4 +73,30 @@ export class Render {
             ctx.strokeRect(coord.x, coord.y, cellSize, cellSize);
         });
     }
+
+    viewStartScreen() {
+        const ctx = this.canvas.ctx;
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        ctx.fillStyle = 'white';
+        ctx.font = '24px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('PRESS ENTER TO START', this.canvas.width / 2, this.canvas.height / 2);
+    }
+
+    viewGameOverScreen() {
+        const ctx = this.canvas.ctx;
+
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.4)';
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        ctx.fillStyle = 'white';
+        ctx.font = '30px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2);
+    }
 }
