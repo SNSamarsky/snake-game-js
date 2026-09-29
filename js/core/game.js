@@ -12,7 +12,10 @@ export class Game {
         this.loop = new Loop((deltaTime) => this.gameStep(deltaTime));
         this.speed = 300;
         this.timeAccumulator = 0;
+
         this.isStarted = false;
+        this.isPaused = false;
+        this.isGameOver = false;
     }
 
     prepare() {
@@ -29,20 +32,36 @@ export class Game {
     }
 
     handleEnterPress() {
-        if (this.isStarted) return;
-
-        if (this.loop.lastTime === 0) {
+        if (!this.isStarted && !this.isGameOver) {
             this.start();
-        } else {
+            return;
+        }
+
+        if (this.isGameOver) {
             this.restart();
+            return;
+        }
+
+        if (this.isStarted) {
+            this.togglePause();
         }
     }
 
     start() {
-        if (this.isStarted) return;
         this.isStarted = true;
-
+        this.isPaused = false;
+        this.isGameOver = false;
         this.loop.start();
+    }
+
+    togglePause() {
+        this.isPaused = !this.isPaused;
+
+        if (this.isPaused) {
+            this.render.viewPauseScreen();
+        } else {
+            this.render.view();
+        }
     }
 
     restart() {
@@ -55,7 +74,15 @@ export class Game {
         this.start();
     }
 
+    stop() {
+        this.loop.stop();
+        this.isStarted = false;
+        this.isGameOver = true;
+    }
+
     gameStep(deltaTime) {
+        if (this.isPaused) return;
+        
         this.timeAccumulator += deltaTime;
 
         if (this.timeAccumulator >= this.speed) {
@@ -107,10 +134,5 @@ export class Game {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText('PRESS ENTER TO START', this.canvas.width / 2, this.canvas.height / 2);
-    }
-
-    stop() {
-        this.loop.stop();
-        this.isStarted = false;
     }
 }

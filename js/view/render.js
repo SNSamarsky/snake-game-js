@@ -103,4 +103,17 @@ export class Render {
         ctx.font = '16px sans-serif';
         ctx.fillText('PRESS ENTER TO RESTART', this.canvas.width / 2, this.canvas.height / 2 + 20);
     }
+
+    viewPauseScreen() {
+        const ctx = this.canvas.ctx;
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        ctx.fillStyle = 'white';
+        ctx.font = '30px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('PAUSE', this.canvas.width / 2, this.canvas.height / 2);
+    }
 }
