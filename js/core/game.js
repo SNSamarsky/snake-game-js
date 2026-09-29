@@ -1,3 +1,5 @@
+import { Loop } from "./loop.js";
+
 export class Game {
     constructor(field, canvas, render, food, snake, inputHandler) {
         this.field = field;
@@ -7,8 +9,9 @@ export class Game {
         this.snake = snake;
         this.inputHandler = inputHandler;
 
-        this.gameInterval = null;
+        this.loop = new Loop((deltaTime) => this.gameStep(deltaTime));
         this.speed = 300;
+        this.timeAccumulator = 0;
         this.isStarted = false;
     }
 
@@ -29,29 +32,35 @@ export class Game {
         if (this.isStarted) return;
         this.isStarted = true;
 
-        this.gameInterval = setInterval(() => this.gameStep(), this.speed);
+        this.loop.start();
     }
 
-    gameStep() {
-        const isEating = this.snake.willEatFood(this.food);
+    gameStep(deltaTime) {
+        this.timeAccumulator += deltaTime;
 
-        const canMove = this.snake.move(
-            this.field,
-            isEating,
-            (nextHead, body) => this.checkCollision(nextHead, body)
-        );
+        if (this.timeAccumulator >= this.speed) {
+            this.timeAccumulator -= this.speed;
 
-        if (!canMove) {
-            this.stop();
-            this.render.viewGameOverScreen();
-            return;
+            const isEating = this.snake.willEatFood(this.food);
+
+            const canMove = this.snake.move(
+                this.field,
+                isEating,
+                (nextHead, body) => this.checkCollision(nextHead, body)
+            );
+
+            if (!canMove) {
+                this.stop();
+                this.render.viewGameOverScreen();
+                return;
+            }
+
+            if (isEating) {
+                this.food.randomizePosition(this.field, this.snake.body);
+            }
+
+            this.render.view();
         }
-
-        if (isEating) {
-            this.food.randomizePosition(this.field, this.snake.body);
-        }
-
-        this.render.view();
     }
 
     checkCollision(nextHead, body) {
@@ -81,7 +90,7 @@ export class Game {
     }
 
     stop() {
-        clearInterval(this.gameInterval);
+        this.loop.stop();
         this.isStarted = false;
         this.inputHandler.destroy();
     }
