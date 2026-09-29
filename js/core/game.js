@@ -16,6 +16,8 @@ export class Game {
         this.isStarted = false;
         this.isPaused = false;
         this.isGameOver = false;
+
+        this.inputQueue = [];
     }
 
     prepare() {
@@ -24,11 +26,24 @@ export class Game {
         this.food.init(this.field);
         this.snake.init(this.field);
 
-        this.inputHandler.init(this.snake, () => this.handleEnterPress());
+        this.inputHandler.init((action) => this.handleAction(action));
 
         this.render.init(this.field, this.food, this.snake);
 
         this.render.viewStartScreen();
+    }
+
+    handleAction(action) {
+        if (action === 'start') {
+            this.handleEnterPress();
+            return;
+        }
+
+        if (!this.isStarted || this.isPaused || this.isGameOver) return;
+
+        if (this.inputQueue.length < 2) {
+            this.inputQueue.push(action);
+        }
     }
 
     handleEnterPress() {
@@ -51,6 +66,7 @@ export class Game {
         this.isStarted = true;
         this.isPaused = false;
         this.isGameOver = false;
+        this.inputQueue = [];
         this.loop.start();
     }
 
@@ -87,6 +103,11 @@ export class Game {
 
         if (this.timeAccumulator >= this.speed) {
             this.timeAccumulator -= this.speed;
+
+            if (this.inputQueue.length > 0) {
+                const nextDirection = this.inputQueue.shift();
+                this.snake.setDirection(nextDirection);
+            }
 
             const isEating = this.snake.willEatFood(this.food);
 

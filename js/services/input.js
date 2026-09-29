@@ -14,14 +14,12 @@ export class InputHandler {
             'Enter': 'start'
         };
 
-        this.snake = null;
-        this.onStartCallback = null;
+        this.onActionCallback = null;
         this.handleKeyDown = this.handleKeyDown.bind(this);
     }
 
-    init(snake, onStartCallback) {
-        this.snake = snake;
-        this.onStartCallback = onStartCallback;
+    init(onActionCallback) {
+        this.onActionCallback = onActionCallback;
         window.addEventListener('keydown', this.handleKeyDown);
     }
 
@@ -31,10 +29,8 @@ export class InputHandler {
 
         event.preventDefault();
 
-        if (action === 'start') {
-            if (this.onStartCallback) this.onStartCallback();
-        } else if (this.snake) {
-            this.snake.setDirection(action);
+        if (this.onActionCallback) {
+            this.onActionCallback(action);
         }
     }
 
