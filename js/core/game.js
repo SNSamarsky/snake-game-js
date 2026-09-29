@@ -21,11 +21,21 @@ export class Game {
         this.food.init(this.field);
         this.snake.init(this.field);
 
-        this.inputHandler.init(this.snake, () => this.start());
+        this.inputHandler.init(this.snake, () => this.handleEnterPress());
 
         this.render.init(this.field, this.food, this.snake);
 
         this.render.viewStartScreen();
+    }
+
+    handleEnterPress() {
+        if (this.isStarted) return;
+
+        if (this.loop.lastTime === 0) {
+            this.start();
+        } else {
+            this.restart();
+        }
     }
 
     start() {
@@ -33,6 +43,16 @@ export class Game {
         this.isStarted = true;
 
         this.loop.start();
+    }
+
+    restart() {
+        this.timeAccumulator = 0;
+
+        this.field.init();
+        this.food.init(this.field);
+        this.snake.init(this.field);
+
+        this.start();
     }
 
     gameStep(deltaTime) {
@@ -92,6 +112,5 @@ export class Game {
     stop() {
         this.loop.stop();
         this.isStarted = false;
-        this.inputHandler.destroy();
     }
 }
