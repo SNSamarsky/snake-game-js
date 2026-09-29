@@ -82,7 +82,7 @@ export class Game {
 
     gameStep(deltaTime) {
         if (this.isPaused) return;
-        
+
         this.timeAccumulator += deltaTime;
 
         if (this.timeAccumulator >= this.speed) {
@@ -121,18 +121,5 @@ export class Game {
         const hitSelf = body.some(segment => segment.x === nextHead.x && segment.y === nextHead.y);
 
         return hitSelf;
-    }
-
-    drawStartScreen() {
-        const ctx = this.canvas.ctx;
-
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        ctx.fillStyle = 'white';
-        ctx.font = '24px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('PRESS ENTER TO START', this.canvas.width / 2, this.canvas.height / 2);
     }
 }
