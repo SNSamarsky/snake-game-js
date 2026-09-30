@@ -1,3 +1,5 @@
+import { formatTime } from "../utils/utils.js";
+
 export class Render {
     constructor(canvas) {
         this.canvas = canvas;
@@ -97,11 +99,8 @@ export class Render {
         ctx.textAlign = 'left';
         ctx.fillText(`SCORE: ${score}`, 15, headerHeight / 2);
 
-        const minutes = Math.floor(gameTime / 60).toString().padStart(2, '0');
-        const seconds = (gameTime % 60).toString().padStart(2, '0');
-
         ctx.textAlign = 'right';
-        ctx.fillText(`TIME: ${minutes}:${seconds}`, this.canvas.width - 15, headerHeight / 2);
+        ctx.fillText(`TIME: ${formatTime(gameTime)}`, this.canvas.width - 15, headerHeight / 2);
     }
 
     viewStartScreen() {
@@ -137,9 +136,8 @@ export class Render {
         ctx.fillText('GAME OVER', this.canvas.width / 2, centerY - 40);
 
         ctx.font = '16px monospace';
-        const minutes = Math.floor(gameTime / 60).toString().padStart(2, '0');
-        const seconds = (gameTime % 60).toString().padStart(2, '0');
-        ctx.fillText(`FINAL SCORE: ${score} | TIME: ${minutes}:${seconds}`, this.canvas.width / 2, centerY + 5);
+
+        ctx.fillText(`FINAL SCORE: ${score} | TIME: ${formatTime(gameTime)}`, this.canvas.width / 2, centerY + 5);
 
         ctx.font = '16px sans-serif';
         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
