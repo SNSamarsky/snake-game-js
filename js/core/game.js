@@ -135,7 +135,7 @@ export class Game {
 
             if (!canMove) {
                 this.stop();
-                this.render.viewGameOverScreen();
+                this.render.viewGameOverScreen(this.score, this.gameTime);
                 return;
             }
 
