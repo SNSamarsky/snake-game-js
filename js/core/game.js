@@ -18,6 +18,10 @@ export class Game {
         this.isGameOver = false;
 
         this.inputQueue = [];
+
+        this.score = 0;
+        this.gameTime = 0;
+        this.timeCounter = 0;
     }
 
     prepare() {
@@ -67,6 +71,11 @@ export class Game {
         this.isPaused = false;
         this.isGameOver = false;
         this.inputQueue = [];
+
+        this.score = 0;
+        this.gameTime = 0;
+        this.timeCounter = 0;
+
         this.loop.start();
     }
 
@@ -74,9 +83,9 @@ export class Game {
         this.isPaused = !this.isPaused;
 
         if (this.isPaused) {
-            this.render.viewPauseScreen();
+            this.render.viewPauseScreen(this.score, this.gameTime);
         } else {
-            this.render.view();
+            this.render.view(this.score, this.gameTime);
         }
     }
 
@@ -98,6 +107,13 @@ export class Game {
 
     gameStep(deltaTime) {
         if (this.isPaused) return;
+
+        this.timeCounter += deltaTime;
+
+        if (this.timeCounter >= 1000) {
+            this.gameTime += 1;
+            this.timeCounter -= 1000;
+        }
 
         this.timeAccumulator += deltaTime;
 
@@ -124,11 +140,12 @@ export class Game {
             }
 
             if (isEating) {
+                this.score += 1;
                 this.food.randomizePosition(this.field, this.snake.body);
             }
-
-            this.render.view();
         }
+
+        this.render.view(this.score, this.gameTime);
     }
 
     checkCollision(nextHead, body) {

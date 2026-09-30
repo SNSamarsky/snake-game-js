@@ -30,7 +30,8 @@ export class Snake {
         this.currentDirection = this.directions.right;
         this.lastStepDirection = this.directions.right;
 
-        this.updateCoordinates(field.cellSize);
+        // 👈 Передаем field целиком
+        this.updateCoordinates(field); 
     }
 
     setDirection(newDirName) {
@@ -65,7 +66,8 @@ export class Snake {
             this.body.pop();
         }
 
-        this.updateCoordinates(field.cellSize);
+        // 👈 Передаем field целиком
+        this.updateCoordinates(field);
 
         return true;
     }
@@ -78,10 +80,13 @@ export class Snake {
         return nextHeadX === food.position.x && nextHeadY === food.position.y;
     }
 
-    updateCoordinates(cellSize) {
+    updateCoordinates(field) {
+        const cellSize = field.cellSize;
+        const headerHeight = field.headerHeight || 0;
+
         this.coordinates = this.body.map(segment => ({
             x: segment.x * cellSize,
-            y: segment.y * cellSize
+            y: (segment.y * cellSize) + headerHeight
         }));
     }
 }

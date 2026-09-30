@@ -1,8 +1,15 @@
 export class Field {
-    constructor(gridSize = 10, canvasSize = 500) {
+    constructor(gridSize = 10, initialCanvasSize = 500) {
         this.gridSize = gridSize;
-        this.canvasSize = canvasSize;
-        this.cellSize = this.canvasSize / this.gridSize;
+        this.cellSize = initialCanvasSize / this.gridSize; 
+        
+        this.headerHeight = 40;
+        
+        this.canvasSize = {
+            width: initialCanvasSize,
+            height: initialCanvasSize + this.headerHeight
+        };
+        
         this.cells = [];
     }
 
@@ -17,7 +24,7 @@ export class Field {
 
                 const coordinates = {
                     x: col * this.cellSize,
-                    y: row * this.cellSize,
+                    y: (row * this.cellSize) + this.headerHeight, 
                 };
 
                 const gridPosition = { x: col, y: row };

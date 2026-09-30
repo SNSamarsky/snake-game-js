@@ -13,9 +13,13 @@ export class Canvas {
     get width() { return this.el.width; }
     get height() { return this.el.height; }
 
-
-    init(width, height = width) {
-        this.resize(width, height);
+    init(widthOrObject, height) {
+        if (typeof widthOrObject === 'object' && widthOrObject !== null) {
+            const { width, height: objHeight } = widthOrObject;
+            this.resize(width, objHeight);
+        } else {
+            this.resize(widthOrObject, height ?? widthOrObject);
+        }
     }
 
     resize(width, height) {

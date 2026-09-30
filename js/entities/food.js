@@ -9,7 +9,7 @@ export class Food {
     }
 
     randomizePosition(field, snakeBody = []) {
-        const { gridSize, cellSize } = field;
+        const { gridSize, cellSize, headerHeight = 0 } = field;
         let newPosition;
         let isInsideSnake;
 
@@ -29,7 +29,7 @@ export class Food {
 
         this.coordinates = {
             x: newPosition.x * cellSize,
-            y: newPosition.y * cellSize
+            y: (newPosition.y * cellSize) + headerHeight
         };
     }
 }

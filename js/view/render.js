@@ -14,11 +14,13 @@ export class Render {
         this.viewSnake();
     }
 
-    view() {
+    view(score = 0, gameTime = 0) {
         this.canvas.clear();
         this.viewField();
         this.viewSnake();
         this.viewFood();
+
+        this.viewHUD(score, gameTime);
     }
 
     viewField() {
@@ -74,6 +76,34 @@ export class Render {
         });
     }
 
+    viewHUD(score, gameTime) {
+        const ctx = this.canvas.ctx;
+        const headerHeight = this.field.headerHeight || 40;
+
+        ctx.fillStyle = '#1a1a1a';
+        ctx.fillRect(0, 0, this.canvas.width, headerHeight);
+
+        ctx.strokeStyle = 'gray';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, headerHeight);
+        ctx.lineTo(this.canvas.width, headerHeight);
+        ctx.stroke();
+
+        ctx.fillStyle = 'white';
+        ctx.font = '16px monospace';
+        ctx.textBaseline = 'middle';
+
+        ctx.textAlign = 'left';
+        ctx.fillText(`SCORE: ${score}`, 15, headerHeight / 2);
+
+        const minutes = Math.floor(gameTime / 60).toString().padStart(2, '0');
+        const seconds = (gameTime % 60).toString().padStart(2, '0');
+
+        ctx.textAlign = 'right';
+        ctx.fillText(`TIME: ${minutes}:${seconds}`, this.canvas.width - 15, headerHeight / 2);
+    }
+
     viewStartScreen() {
         const ctx = this.canvas.ctx;
 
@@ -87,33 +117,48 @@ export class Render {
         ctx.fillText('PRESS ENTER TO START', this.canvas.width / 2, this.canvas.height / 2);
     }
 
-    viewGameOverScreen() {
-        const ctx = this.canvas.ctx;
+    viewGameOverScreen(score = 0, gameTime = 0) {
+        this.view(score, gameTime);
 
-        ctx.fillStyle = 'rgba(255, 0, 0, 0.4)';
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        const ctx = this.canvas.ctx;
+        const headerHeight = this.field.headerHeight || 40;
+        const gameZoneHeight = this.canvas.height - headerHeight;
+
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.35)';
+        ctx.fillRect(0, headerHeight, this.canvas.width, gameZoneHeight);
+
+        const centerY = headerHeight + gameZoneHeight / 2;
 
         ctx.fillStyle = 'white';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
-        ctx.font = '30px sans-serif';
-        ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2 - 20);
+        ctx.font = 'bold 32px sans-serif';
+        ctx.fillText('GAME OVER', this.canvas.width / 2, centerY - 40);
+
+        ctx.font = '16px monospace';
+        const minutes = Math.floor(gameTime / 60).toString().padStart(2, '0');
+        const seconds = (gameTime % 60).toString().padStart(2, '0');
+        ctx.fillText(`FINAL SCORE: ${score} | TIME: ${minutes}:${seconds}`, this.canvas.width / 2, centerY + 5);
 
         ctx.font = '16px sans-serif';
-        ctx.fillText('PRESS ENTER TO RESTART', this.canvas.width / 2, this.canvas.height / 2 + 20);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.fillText('PRESS ENTER TO RESTART', this.canvas.width / 2, centerY + 45);
     }
 
-    viewPauseScreen() {
-        const ctx = this.canvas.ctx;
+    viewPauseScreen(score = 0, gameTime = 0) {
+        this.view(score, gameTime);
 
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        const ctx = this.canvas.ctx;
+        const headerHeight = this.field.headerHeight || 40;
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.fillRect(0, headerHeight, this.canvas.width, this.canvas.height - headerHeight);
 
         ctx.fillStyle = 'white';
         ctx.font = '30px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('PAUSE', this.canvas.width / 2, this.canvas.height / 2);
+        ctx.fillText('PAUSE', this.canvas.width / 2, headerHeight + (this.canvas.height - headerHeight) / 2);
     }
 }
