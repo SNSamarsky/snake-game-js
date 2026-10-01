@@ -1,4 +1,5 @@
 import { Loop } from "./loop.js";
+import { isPositionInList } from "../utils/utils.js";
 
 export class Game {
     constructor(field, canvas, render, food, snake, inputHandler) {
@@ -156,8 +157,6 @@ export class Game {
 
         if (hitWall) return true;
 
-        const hitSelf = body.some(segment => segment.x === nextHead.x && segment.y === nextHead.y);
-
-        return hitSelf;
+        return isPositionInList(nextHead, body);
     }
 }
