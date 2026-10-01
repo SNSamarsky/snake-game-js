@@ -1,15 +1,15 @@
 export class Field {
     constructor(gridSize = 10, initialCanvasSize = 500) {
         this.gridSize = gridSize;
-        this.cellSize = initialCanvasSize / this.gridSize; 
-        
+        this.cellSize = initialCanvasSize / this.gridSize;
+
         this.headerHeight = 40;
-        
+
         this.canvasSize = {
             width: initialCanvasSize,
             height: initialCanvasSize + this.headerHeight
         };
-        
+
         this.cells = [];
     }
 
@@ -24,7 +24,7 @@ export class Field {
 
                 const coordinates = {
                     x: col * this.cellSize,
-                    y: (row * this.cellSize) + this.headerHeight, 
+                    y: (row * this.cellSize) + this.headerHeight,
                 };
 
                 const gridPosition = { x: col, y: row };
@@ -38,5 +38,12 @@ export class Field {
                 });
             }
         }
+    }
+
+    isOutOfBounds(position) {
+        return position.x < 0 ||
+            position.x >= this.gridSize ||
+            position.y < 0 ||
+            position.y >= this.gridSize;
     }
 }

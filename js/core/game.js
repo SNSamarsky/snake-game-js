@@ -150,13 +150,6 @@ export class Game {
     }
 
     checkCollision(nextHead, body) {
-        const hitWall = nextHead.x < 0 ||
-            nextHead.x >= this.field.gridSize ||
-            nextHead.y < 0 ||
-            nextHead.y >= this.field.gridSize;
-
-        if (hitWall) return true;
-
-        return isPositionInList(nextHead, body);
+        return this.field.isOutOfBounds(nextHead) || isPositionInList(nextHead, body);
     }
 }
