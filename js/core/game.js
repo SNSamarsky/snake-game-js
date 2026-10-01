@@ -1,5 +1,6 @@
 import { Loop } from "./loop.js";
 import { isPositionInList } from "../utils/utils.js";
+import { CONFIG } from "../config/config.js";
 
 export class Game {
     constructor(field, canvas, render, food, snake, inputHandler) {
@@ -11,7 +12,7 @@ export class Game {
         this.inputHandler = inputHandler;
 
         this.loop = new Loop((deltaTime) => this.gameStep(deltaTime));
-        this.speed = 300;
+        this.speed = CONFIG.GAME.INITIAL_SPEED;
         this.timeAccumulator = 0;
 
         this.isStarted = false;
@@ -141,7 +142,7 @@ export class Game {
             }
 
             if (isEating) {
-                this.score += 1;
+                this.score += CONFIG.GAME.SCORE_PER_FOOD;
                 this.food.randomizePosition(this.field, this.snake.body);
             }
         }

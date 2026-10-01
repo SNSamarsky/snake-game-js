@@ -1,4 +1,5 @@
 import { formatTime } from "../utils/utils.js";
+import { CONFIG } from "../config/config.js";
 
 export class Render {
     constructor(canvas) {
@@ -31,7 +32,7 @@ export class Render {
         const ctx = this.canvas.ctx;
         const size = this.field.cellSize;
 
-        ctx.strokeStyle = 'gray';
+        ctx.strokeStyle = CONFIG.THEME.LINE_COLOR;
         ctx.lineWidth = 1;
 
         for (const cell of this.field.cells) {
@@ -48,8 +49,8 @@ export class Render {
         if (!this.food || !this.field) return;
 
         const ctx = this.canvas.ctx;
-        ctx.fillStyle = 'yellow';
-        ctx.strokeStyle = 'gray';
+        ctx.fillStyle = CONFIG.THEME.FOOD;
+        ctx.strokeStyle = CONFIG.THEME.LINE_COLOR;
         ctx.lineWidth = 1;
 
         const coord = this.food.coordinates;
@@ -66,12 +67,11 @@ export class Render {
         const ctx = this.canvas.ctx;
         const cellSize = this.field.cellSize;
 
-        ctx.fillStyle = 'green';
-        ctx.strokeStyle = 'gray';
+        ctx.strokeStyle = CONFIG.THEME.LINE_COLOR;
         ctx.lineWidth = 1;
 
         this.snake.coordinates.forEach((coord, index) => {
-            ctx.fillStyle = index === 0 ? 'darkgreen' : 'green';
+            ctx.fillStyle = index === 0 ? CONFIG.THEME.SNAKE_HEAD : CONFIG.THEME.SNAKE_BODY;
 
             ctx.fillRect(coord.x, coord.y, cellSize, cellSize);
             ctx.strokeRect(coord.x, coord.y, cellSize, cellSize);
@@ -82,17 +82,17 @@ export class Render {
         const ctx = this.canvas.ctx;
         const headerHeight = this.field.headerHeight || 40;
 
-        ctx.fillStyle = '#1a1a1a';
+        ctx.fillStyle = CONFIG.THEME.HUD_BG;
         ctx.fillRect(0, 0, this.canvas.width, headerHeight);
 
-        ctx.strokeStyle = 'gray';
+        ctx.strokeStyle = CONFIG.THEME.LINE_COLOR;
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(0, headerHeight);
         ctx.lineTo(this.canvas.width, headerHeight);
         ctx.stroke();
 
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = CONFIG.THEME.TEXT_MAIN;
         ctx.font = '16px monospace';
         ctx.textBaseline = 'middle';
 
@@ -106,10 +106,10 @@ export class Render {
     viewStartScreen() {
         const ctx = this.canvas.ctx;
 
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillStyle = CONFIG.THEME.OVERLAY_START;
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = CONFIG.THEME.TEXT_MAIN;
         ctx.font = '24px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -123,12 +123,12 @@ export class Render {
         const headerHeight = this.field.headerHeight || 40;
         const gameZoneHeight = this.canvas.height - headerHeight;
 
-        ctx.fillStyle = 'rgba(255, 0, 0, 0.35)';
+        ctx.fillStyle = CONFIG.THEME.OVERLAY_GAME_OVER;
         ctx.fillRect(0, headerHeight, this.canvas.width, gameZoneHeight);
 
         const centerY = headerHeight + gameZoneHeight / 2;
 
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = CONFIG.THEME.TEXT_MAIN;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
@@ -150,10 +150,10 @@ export class Render {
         const ctx = this.canvas.ctx;
         const headerHeight = this.field.headerHeight || 40;
 
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        ctx.fillStyle = CONFIG.THEME.OVERLAY_PAUSE;
         ctx.fillRect(0, headerHeight, this.canvas.width, this.canvas.height - headerHeight);
 
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = CONFIG.THEME.TEXT_MAIN;
         ctx.font = '30px sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';

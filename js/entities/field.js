@@ -1,13 +1,15 @@
-export class Field {
-    constructor(gridSize = 10, initialCanvasSize = 500) {
-        this.gridSize = gridSize;
-        this.cellSize = initialCanvasSize / this.gridSize;
+import { CONFIG } from "../config/config.js";
 
-        this.headerHeight = 40;
+export class Field {
+    constructor() {
+        this.gridSize = CONFIG.FIELD.GRID_SIZE;
+        this.cellSize = CONFIG.FIELD.INITIAL_CANVAS_SIZE / this.gridSize;
+
+        this.headerHeight = CONFIG.GAME.HEADER_HEIGHT;
 
         this.canvasSize = {
-            width: initialCanvasSize,
-            height: initialCanvasSize + this.headerHeight
+            width: CONFIG.FIELD.INITIAL_CANVAS_SIZE,
+            height: CONFIG.FIELD.INITIAL_CANVAS_SIZE + this.headerHeight
         };
 
         this.cells = [];
