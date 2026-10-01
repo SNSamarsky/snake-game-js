@@ -16,6 +16,8 @@ export class Snake {
 
         this.currentDirection = this.directions.right;
         this.lastStepDirection = this.directions.right;
+
+        this.inputQueue = [];
     }
 
     init(field) {
@@ -27,11 +29,25 @@ export class Snake {
             { x: centerX - 1, y: centerY }
         ];
 
+        this.inputQueue = [];
+
         this.currentDirection = this.directions.right;
         this.lastStepDirection = this.directions.right;
 
-        // 👈 Передаем field целиком
-        this.updateCoordinates(field); 
+        this.updateCoordinates(field);
+    }
+
+    enqueueAction(action) {
+        if (this.inputQueue.length < 2) {
+            this.inputQueue.push(action);
+        }
+    }
+
+    updateDirectionFromQueue() {
+        if (this.inputQueue.length > 0) {
+            const nextDirName = this.inputQueue.shift();
+            this.setDirection(nextDirName);
+        }
     }
 
     setDirection(newDirName) {

@@ -19,8 +19,6 @@ export class Game {
         this.isPaused = false;
         this.isGameOver = false;
 
-        this.inputQueue = [];
-
         this.score = 0;
         this.gameTime = 0;
         this.timeCounter = 0;
@@ -47,9 +45,7 @@ export class Game {
 
         if (!this.isStarted || this.isPaused || this.isGameOver) return;
 
-        if (this.inputQueue.length < 2) {
-            this.inputQueue.push(action);
-        }
+        this.snake.enqueueAction(action);
     }
 
     handleEnterPress() {
@@ -72,7 +68,6 @@ export class Game {
         this.isStarted = true;
         this.isPaused = false;
         this.isGameOver = false;
-        this.inputQueue = [];
 
         this.score = 0;
         this.gameTime = 0;
@@ -122,10 +117,7 @@ export class Game {
         if (this.timeAccumulator >= this.speed) {
             this.timeAccumulator -= this.speed;
 
-            if (this.inputQueue.length > 0) {
-                const nextDirection = this.inputQueue.shift();
-                this.snake.setDirection(nextDirection);
-            }
+            this.snake.updateDirectionFromQueue();
 
             const isEating = this.snake.willEatFood(this.food);
 
