@@ -80,7 +80,7 @@ export class Render {
 
     viewHUD(score, gameTime) {
         const ctx = this.canvas.ctx;
-        const headerHeight = this.field.headerHeight || 40;
+        const headerHeight = this.field.headerHeight;
 
         ctx.fillStyle = CONFIG.THEME.HUD_BG;
         ctx.fillRect(0, 0, this.canvas.width, headerHeight);
@@ -92,16 +92,17 @@ export class Render {
         ctx.lineTo(this.canvas.width, headerHeight);
         ctx.stroke();
 
-        ctx.fillStyle = CONFIG.THEME.TEXT_MAIN;
-        ctx.font = '16px monospace';
-        ctx.textBaseline = 'middle';
+        this.drawText(`SCORE: ${score}`, 15, headerHeight / 2, {
+            font: '16px monospace',
+            align: 'left'
+        });
 
-        ctx.textAlign = 'left';
-        ctx.fillText(`SCORE: ${score}`, 15, headerHeight / 2);
-
-        ctx.textAlign = 'right';
-        ctx.fillText(`TIME: ${formatTime(gameTime)}`, this.canvas.width - 15, headerHeight / 2);
+        this.drawText(`TIME: ${formatTime(gameTime)}`, this.canvas.width - 15, headerHeight / 2, {
+            font: '16px monospace',
+            align: 'right'
+        });
     }
+
 
     viewStartScreen() {
         const ctx = this.canvas.ctx;
@@ -109,18 +110,16 @@ export class Render {
         ctx.fillStyle = CONFIG.THEME.OVERLAY_START;
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        ctx.fillStyle = CONFIG.THEME.TEXT_MAIN;
-        ctx.font = '24px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('PRESS ENTER TO START', this.canvas.width / 2, this.canvas.height / 2);
+        this.drawText('PRESS ENTER TO START', this.canvas.width / 2, this.canvas.height / 2, {
+            font: '24px sans-serif'
+        });
     }
 
     viewGameOverScreen(score = 0, gameTime = 0) {
         this.view(score, gameTime);
 
         const ctx = this.canvas.ctx;
-        const headerHeight = this.field.headerHeight || 40;
+        const headerHeight = this.field.headerHeight;
         const gameZoneHeight = this.canvas.height - headerHeight;
 
         ctx.fillStyle = CONFIG.THEME.OVERLAY_GAME_OVER;
@@ -128,35 +127,51 @@ export class Render {
 
         const centerY = headerHeight + gameZoneHeight / 2;
 
-        ctx.fillStyle = CONFIG.THEME.TEXT_MAIN;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
+        this.drawText('GAME OVER', this.canvas.width / 2, centerY - 40, {
+            font: 'bold 32px sans-serif'
+        });
 
-        ctx.font = 'bold 32px sans-serif';
-        ctx.fillText('GAME OVER', this.canvas.width / 2, centerY - 40);
+        this.drawText(`FINAL SCORE: ${score} | TIME: ${formatTime(gameTime)}`, this.canvas.width / 2, centerY + 5, {
+            font: '16px monospace'
+        });
 
-        ctx.font = '16px monospace';
-
-        ctx.fillText(`FINAL SCORE: ${score} | TIME: ${formatTime(gameTime)}`, this.canvas.width / 2, centerY + 5);
-
-        ctx.font = '16px sans-serif';
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.fillText('PRESS ENTER TO RESTART', this.canvas.width / 2, centerY + 45);
+        this.drawText('PRESS ENTER TO RESTART', this.canvas.width / 2, centerY + 45, {
+            font: '16px sans-serif',
+            color: 'rgba(255, 255, 255, 0.8)'
+        });
     }
-
     viewPauseScreen(score = 0, gameTime = 0) {
         this.view(score, gameTime);
 
         const ctx = this.canvas.ctx;
-        const headerHeight = this.field.headerHeight || 40;
+        const headerHeight = this.field.headerHeight;
+        const gameZoneHeight = this.canvas.height - headerHeight;
 
         ctx.fillStyle = CONFIG.THEME.OVERLAY_PAUSE;
-        ctx.fillRect(0, headerHeight, this.canvas.width, this.canvas.height - headerHeight);
+        ctx.fillRect(0, headerHeight, this.canvas.width, gameZoneHeight);
 
-        ctx.fillStyle = CONFIG.THEME.TEXT_MAIN;
-        ctx.font = '30px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('PAUSE', this.canvas.width / 2, headerHeight + (this.canvas.height - headerHeight) / 2);
+        const centerY = headerHeight + (gameZoneHeight / 2);
+
+        this.drawText('PAUSE', this.canvas.width / 2, centerY, {
+            font: 'bold 30px sans-serif'
+        });
+    }
+
+    drawText(text, x, y, options = {}) {
+        const ctx = this.canvas.ctx;
+
+        const {
+            font = '16px sans-serif',
+            color = CONFIG.THEME.TEXT_MAIN,
+            align = 'center',
+            baseline = 'middle'
+        } = options;
+
+        ctx.fillStyle = color;
+        ctx.font = font;
+        ctx.textAlign = align;
+        ctx.textBaseline = baseline;
+
+        ctx.fillText(text, x, y);
     }
 }
