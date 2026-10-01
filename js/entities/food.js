@@ -1,3 +1,5 @@
+import { getRandomInt, isPositionInList } from "../utils/utils.js";
+
 export class Food {
     constructor() {
         this.position = { x: 0, y: 0 };
@@ -11,19 +13,14 @@ export class Food {
     randomizePosition(field, snakeBody = []) {
         const { gridSize, cellSize, headerHeight = 0 } = field;
         let newPosition;
-        let isInsideSnake;
 
         do {
             newPosition = {
-                x: Math.floor(Math.random() * gridSize),
-                y: Math.floor(Math.random() * gridSize)
+                x: getRandomInt(gridSize),
+                y: getRandomInt(gridSize)
             };
 
-            isInsideSnake = snakeBody.some(
-                segment => segment.x === newPosition.x && segment.y === newPosition.y
-            );
-
-        } while (isInsideSnake);
+        } while (isPositionInList(newPosition, snakeBody));
 
         this.position = newPosition;
 
