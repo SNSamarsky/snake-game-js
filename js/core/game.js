@@ -3,13 +3,14 @@ import { isPositionInList } from "../utils/utils.js";
 import { CONFIG } from "../config/config.js";
 
 export class Game {
-    constructor(field, canvas, render, food, snake, inputHandler) {
+    constructor(field, canvas, render, food, snake, inputHandler, recordService) {
         this.field = field;
         this.canvas = canvas;
         this.render = render;
         this.food = food;
         this.snake = snake;
         this.inputHandler = inputHandler;
+        this.recordService = recordService;
 
         this.loop = new Loop((deltaTime) => this.gameStep(deltaTime));
         this.speed = CONFIG.GAME.INITIAL_SPEED;
@@ -80,9 +81,9 @@ export class Game {
         this.isPaused = !this.isPaused;
 
         if (this.isPaused) {
-            this.render.viewPauseScreen(this.score, this.gameTime);
+            this.render.viewPauseScreen(this.score, this.gameTime, this.recordService.getRecord());
         } else {
-            this.render.view(this.score, this.gameTime);
+            this.render.view(this.score, this.gameTime, this.recordService.getRecord());
         }
     }
 
@@ -129,17 +130,19 @@ export class Game {
 
             if (!canMove) {
                 this.stop();
-                this.render.viewGameOverScreen(this.score, this.gameTime);
+                const currentRecord = this.recordService.getRecord();
+                this.render.viewGameOverScreen(this.score, this.gameTime, currentRecord);
                 return;
             }
 
             if (isEating) {
                 this.score += CONFIG.GAME.SCORE_PER_FOOD;
                 this.food.randomizePosition(this.field, this.snake.body);
+                this.recordService.checkAndUpdate(this.score, this.gameTime);
             }
         }
 
-        this.render.view(this.score, this.gameTime);
+        this.render.view(this.score, this.gameTime, this.recordService.getRecord());
     }
 
     checkCollision(nextHead, body) {

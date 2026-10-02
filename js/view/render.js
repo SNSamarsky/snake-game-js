@@ -17,13 +17,13 @@ export class Render {
         this.viewSnake();
     }
 
-    view(score = 0, gameTime = 0) {
+    view(score = 0, gameTime = 0, highScoreRecord = { score: 0, time: 0 }) {
         this.canvas.clear();
         this.viewField();
         this.viewSnake();
         this.viewFood();
 
-        this.viewHUD(score, gameTime);
+        this.viewHUD(score, gameTime, highScoreRecord);
     }
 
     viewField() {
@@ -78,7 +78,7 @@ export class Render {
         });
     }
 
-    viewHUD(score, gameTime) {
+    viewHUD(score, gameTime, highScoreRecord = { score: 0, time: 0 }) {
         const ctx = this.canvas.ctx;
         const headerHeight = this.field.headerHeight;
 
@@ -95,6 +95,12 @@ export class Render {
         this.drawText(`SCORE: ${score}`, 15, headerHeight / 2, {
             font: '16px monospace',
             align: 'left'
+        });
+
+        const bestTimeStr = highScoreRecord.time === Infinity ? '00:00' : formatTime(highScoreRecord.time);
+        this.drawText(`BEST: ${highScoreRecord.score} (${bestTimeStr})`, this.canvas.width / 2, headerHeight / 2, {
+            font: '16px monospace',
+            align: 'center'
         });
 
         this.drawText(`TIME: ${formatTime(gameTime)}`, this.canvas.width - 15, headerHeight / 2, {
@@ -115,8 +121,8 @@ export class Render {
         });
     }
 
-    viewGameOverScreen(score = 0, gameTime = 0) {
-        this.view(score, gameTime);
+    viewGameOverScreen(score = 0, gameTime = 0, highScoreRecord = { score: 0, time: 0 }) {
+        this.view(score, gameTime, highScoreRecord);
 
         const ctx = this.canvas.ctx;
         const headerHeight = this.field.headerHeight;
@@ -131,8 +137,9 @@ export class Render {
             font: 'bold 32px sans-serif'
         });
 
-        this.drawText(`FINAL SCORE: ${score} | TIME: ${formatTime(gameTime)}`, this.canvas.width / 2, centerY + 5, {
-            font: '16px monospace'
+        const bestTimeStr = highScoreRecord.time === Infinity ? '00:00' : formatTime(highScoreRecord.time);
+        this.drawText(`SCORE: ${score} | BEST: ${highScoreRecord.score} (${bestTimeStr}) | TIME: ${formatTime(gameTime)}`, this.canvas.width / 2, centerY, {
+            font: '14px monospace'
         });
 
         this.drawText('PRESS ENTER TO RESTART', this.canvas.width / 2, centerY + 45, {
@@ -140,8 +147,8 @@ export class Render {
             color: 'rgba(255, 255, 255, 0.8)'
         });
     }
-    viewPauseScreen(score = 0, gameTime = 0) {
-        this.view(score, gameTime);
+    viewPauseScreen(score = 0, gameTime = 0, highScoreRecord = { score: 0, time: 0 }) {
+        this.view(score, gameTime, highScoreRecord);
 
         const ctx = this.canvas.ctx;
         const headerHeight = this.field.headerHeight;
