@@ -17,11 +17,13 @@ export class Render {
         this.viewSnake();
     }
 
-    view(score = 0, gameTime = 0, highScoreRecord = { score: 0, time: 0 }) {
+    view(score = 0, gameTime = 0, highScoreRecord = { score: 0, time: 0 }, hideFood = false) {
         this.canvas.clear();
         this.viewField();
         this.viewSnake();
-        this.viewFood();
+        if (!hideFood) {
+            this.viewFood();
+        }
 
         this.viewHUD(score, gameTime, highScoreRecord);
     }
@@ -147,6 +149,38 @@ export class Render {
             color: 'rgba(255, 255, 255, 0.8)'
         });
     }
+
+    viewWinScreen(score = 0, gameTime = 0, highScoreRecord = { score: 0, time: 0 }) {
+        this.view(score, gameTime, highScoreRecord, true);
+
+        const ctx = this.canvas.ctx;
+        const headerHeight = this.field.headerHeight;
+        const gameZoneHeight = this.canvas.height - headerHeight;
+
+        ctx.fillStyle = CONFIG.THEME.OVERLAY_WIN;
+        ctx.fillRect(0, headerHeight, this.canvas.width, gameZoneHeight);
+
+        const centerY = headerHeight + gameZoneHeight / 2;
+
+        this.drawText('VICTORY!', this.canvas.width / 2, centerY - 45, {
+            font: 'bold 36px sans-serif',
+            color: '#ffd700'
+        });
+
+        const bestTimeStr = highScoreRecord.time === Infinity ? '00:00' : formatTime(highScoreRecord.time);
+        this.drawText(
+            `YOU FILLED THE FIELD! | BEST: ${highScoreRecord.score} (${bestTimeStr})`,
+            this.canvas.width / 2,
+            centerY,
+            { font: '14px monospace' }
+        );
+
+        this.drawText('PRESS ENTER TO PLAY AGAIN', this.canvas.width / 2, centerY + 45, {
+            font: '16px sans-serif',
+            color: 'white'
+        });
+    }
+
     viewPauseScreen(score = 0, gameTime = 0, highScoreRecord = { score: 0, time: 0 }) {
         this.view(score, gameTime, highScoreRecord);
 

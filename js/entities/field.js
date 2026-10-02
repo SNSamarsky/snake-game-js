@@ -48,4 +48,8 @@ export class Field {
             position.y < 0 ||
             position.y >= this.gridSize;
     }
+
+    getMaxCellsCount() {
+        return this.gridSize * this.gridSize;
+    }
 }

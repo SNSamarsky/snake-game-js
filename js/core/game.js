@@ -19,6 +19,7 @@ export class Game {
         this.isStarted = false;
         this.isPaused = false;
         this.isGameOver = false;
+        this.isWin = false;
 
         this.score = 0;
         this.gameTime = 0;
@@ -39,12 +40,17 @@ export class Game {
     }
 
     handleAction(action) {
+        if (this.isWin && action === 'start') {
+            this.restart();
+            return;
+        }
+
         if (action === 'start') {
             this.handleEnterPress();
             return;
         }
 
-        if (!this.isStarted || this.isPaused || this.isGameOver) return;
+        if (this.isWin || !this.isStarted || this.isPaused || this.isGameOver) return;
 
         this.snake.enqueueAction(action);
     }
@@ -65,10 +71,19 @@ export class Game {
         }
     }
 
+    handleWin() {
+        this.loop.stop();
+        this.isStarted = false;
+        this.isWin = true;
+        const currentRecord = this.recordService.getRecord();
+        this.render.viewWinScreen(this.score, this.gameTime, currentRecord);
+    }
+
     start() {
         this.isStarted = true;
         this.isPaused = false;
         this.isGameOver = false;
+        this.isWin = false;
 
         this.score = 0;
         this.gameTime = 0;
@@ -137,8 +152,15 @@ export class Game {
 
             if (isEating) {
                 this.score += CONFIG.GAME.SCORE_PER_FOOD;
-                this.food.randomizePosition(this.field, this.snake.body);
+
                 this.recordService.checkAndUpdate(this.score, this.gameTime);
+
+                if (this.snake.body.length === this.field.getMaxCellsCount()) {
+                    this.handleWin();
+                    return;
+                }
+
+                this.food.randomizePosition(this.field, this.snake.body);
             }
         }
 

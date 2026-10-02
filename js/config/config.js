@@ -5,7 +5,7 @@ export const CONFIG = {
         HEADER_HEIGHT: 40,
     },
     FIELD: {
-        GRID_SIZE: 10,
+        GRID_SIZE: 4,
         INITIAL_CANVAS_SIZE: 500,
     },
     THEME: {
@@ -17,6 +17,7 @@ export const CONFIG = {
         FOOD: 'yellow',
         OVERLAY_PAUSE: 'rgba(0, 0, 0, 0.4)',
         OVERLAY_GAME_OVER: 'rgba(255, 0, 0, 0.35)',
-        OVERLAY_START: 'rgba(0, 0, 0, 0.5)'
+        OVERLAY_START: 'rgba(0, 0, 0, 0.5)',
+        OVERLAY_WIN: 'rgba(0, 128, 0, 0.4)',
     }
 };
