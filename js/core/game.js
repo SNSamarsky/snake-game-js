@@ -34,9 +34,38 @@ export class Game {
 
         this.inputHandler.init((action) => this.handleAction(action));
 
-        this.render.init(this.field, this.food, this.snake);
+        window.addEventListener('resize', () => this.handleResize());
 
+        this.render.init(this.field, this.food, this.snake);
         this.render.viewStartScreen();
+    }
+
+    handleResize() {
+        this.field.resize();
+
+        this.canvas.resize(this.field.canvasSize.width, this.field.canvasSize.height);
+
+        this.canvas.clear();
+
+        this.snake.updateCoordinates(this.field);
+
+        this.food.coordinates = {
+            x: this.food.position.x * this.field.cellSize,
+            y: (this.food.position.y * this.field.cellSize) + this.field.headerHeight
+        };
+
+        if (this.isWin) {
+            this.render.viewWinScreen(this.score, this.gameTime, this.recordService.getRecord());
+        } else if (this.isGameOver) {
+            this.render.viewGameOverScreen(this.score, this.gameTime, this.recordService.getRecord());
+        } else if (this.isPaused) {
+            this.render.viewPauseScreen(this.score, this.gameTime, this.recordService.getRecord());
+        } else if (!this.isStarted) {
+            this.canvas.clear();
+            this.render.viewStartScreen();
+        } else {
+            this.render.view(this.score, this.gameTime, this.recordService.getRecord());
+        }
     }
 
     handleAction(action) {

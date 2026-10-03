@@ -5,7 +5,7 @@ export const CONFIG = {
         HEADER_HEIGHT: 40,
     },
     FIELD: {
-        GRID_SIZE: 4,
+        GRID_SIZE: 10,
         INITIAL_CANVAS_SIZE: 500,
     },
     THEME: {

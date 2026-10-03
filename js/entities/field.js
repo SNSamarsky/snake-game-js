@@ -3,20 +3,32 @@ import { CONFIG } from "../config/config.js";
 export class Field {
     constructor() {
         this.gridSize = CONFIG.FIELD.GRID_SIZE;
-        this.cellSize = CONFIG.FIELD.INITIAL_CANVAS_SIZE / this.gridSize;
-
         this.headerHeight = CONFIG.GAME.HEADER_HEIGHT;
-
-        this.canvasSize = {
-            width: CONFIG.FIELD.INITIAL_CANVAS_SIZE,
-            height: CONFIG.FIELD.INITIAL_CANVAS_SIZE + this.headerHeight
-        };
-
+        this.cellSize = 0;
+        this.canvasSize = { width: 0, height: 0 };
         this.cells = [];
     }
 
     init() {
-        this.cells = [];
+        this.resize();
+    }
+
+    resize() {
+        const padding = 20;
+        const maxWidth = window.innerWidth - padding;
+        const maxHeight = window.innerHeight - padding - this.headerHeight;
+
+        const baseSize = Math.min(maxWidth, maxHeight);
+
+        const finalGameZoneSize = Math.min(baseSize, CONFIG.FIELD.INITIAL_CANVAS_SIZE);
+
+        this.cellSize = finalGameZoneSize / this.gridSize;
+
+        this.canvasSize = {
+            width: finalGameZoneSize,
+            height: finalGameZoneSize + this.headerHeight
+        };
+
         this.createCells();
     }
 
