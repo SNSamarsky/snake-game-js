@@ -15,7 +15,7 @@ const snake = new Snake();
 const food = new Food();
 const canvas = new Canvas(ROOT_SELECTOR);
 const render = new Render(canvas);
-const inputHandler = new InputHandler();
+const inputHandler = new InputHandler(ROOT_SELECTOR);
 const recordService = new RecordService();
 
 const game = new Game(field, canvas, render, food, snake, inputHandler, recordService);
