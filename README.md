@@ -1,5 +1,7 @@
 # 🐍 Snake Game in JavaScript
-
+<p align="center">
+  <a href="https://snsamarsky.github.io/snake-game-js/">Play now!</a>
+</p>
 <p align="center">
   <img src="https://github.com/user-attachments/assets/a17ed58c-775e-4417-acfa-2830e46d42bd" alt="Snake Game Gameplay" width="400"/>
 </p>
