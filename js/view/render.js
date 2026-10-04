@@ -112,9 +112,9 @@ export class Render {
     }
 
 
-    viewStartScreen() {
+    viewStartScreen() { 
         this.viewField();
-
+        
         const ctx = this.canvas.ctx;
 
         ctx.fillStyle = CONFIG.THEME.OVERLAY_START;
